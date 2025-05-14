@@ -26,19 +26,22 @@ export default defineConfig({
 ```
 
 ### Options
-Detailed documentation can be found in [`types.d.ts`](./blob/main/src/types.d.ts).
+Detailed documentation can be found in [`types.d.ts`](./src/types.d.ts).
 
 #### `path`
 The path for the IPC proxy to listen on.
 
-Can be a `string`, which will be resolved against the current working directory.
-On Windows `\\?\pipe\` will be prepended.
+##### Basic path
 
 ```js
 path: "test.sock"
 ```
 
-Or an object with separate platform paths:
+The provided path will be resolved against the current working directory. On Windows `\\?\pipe\` will be prepended.
+
+The example will listen at `$(pwd)/test.sock` on Unix-like platforms and `\\?\pipe\C:\current-working-directory\test.sock` on Windows.
+
+##### Individual platform paths
 
 ```js
 path: {
@@ -47,7 +50,9 @@ path: {
 }
 ```
 
-It's also possible to disable the IPC proxy for a platform:
+If the provided `windows` name doesn't start with `\\.\pipe\` or `\\?\pipe\` then `\\?\pipe\` will be prepended.
+
+##### Disabling IPC for a platform
 
 ```js
 path: {
@@ -68,3 +73,6 @@ listenOptions: {
     // etc.
 }
 ```
+
+## Changelog
+See [releases](https://github.com/HoldYourWaffle/vite-plugin-serve-ipc/releases) for changelogs.
