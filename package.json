@@ -1,0 +1,36 @@
+{
+	"name": "vite-plugin-serve-ipc",
+	"type": "module",
+	"version": "0.1.0",
+	"description": "Serve Vite's development or preview server over IPC.",
+	"main": "src/plugin.js",
+	"files": [ "src" ],
+	"scripts": {
+		"check": "tsc"
+	},
+	"peerDependencies": {
+		"vite": "^6.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^22.15.17",
+		"typescript": "^5.8.3",
+		"vite": "^6.3.5"
+	},
+	"author": "HoldYourWaffle <holdyourwaffle@gmail.com>",
+	"license": "MIT",
+	"homepage": "https://github.com/HoldYourWaffle/vite-plugin-serve-ipc#readme",
+	"bugs": {
+		"url": "https://github.com/HoldYourWaffle/vite-plugin-serve-ipc/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/HoldYourWaffle/vite-plugin-serve-ipc.git"
+	},
+	"keywords": [
+		"vite",
+		"vite-plugin",
+		"ipc",
+		"unix-socket",
+		"named-pipe"
+	]
+}

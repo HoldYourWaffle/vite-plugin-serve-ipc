@@ -1,0 +1,35 @@
+{
+	"compilerOptions": {
+		"target": "es2022",
+		// Needed for Vite typings
+		"lib": [ "WebWorker" ],
+
+		/* Modules */
+		"module": "node18",
+		"moduleResolution": "node16",
+
+		/* JavaScript Support */
+		"allowJs": true,
+		"checkJs": true,
+
+		/* Emit */
+		"noEmit": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+
+		/* Type Checking */
+		"strict": true,
+		"exactOptionalPropertyTypes": true,
+		"noImplicitReturns": true,
+		"noImplicitOverride": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noUncheckedIndexedAccess": true,
+
+		/* Completeness */
+		"skipDefaultLibCheck": true
+	},
+	"include": [
+		"src/**/*",
+		"tests/**/*"
+	]
+}
