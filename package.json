@@ -4,6 +4,7 @@
 	"version": "0.1.0",
 	"description": "Serve Vite's development or preview server over IPC.",
 	"main": "src/plugin.js",
+	"types": "src/types.d.ts",
 	"files": [ "src" ],
 	"scripts": {
 		"check": "tsc"
