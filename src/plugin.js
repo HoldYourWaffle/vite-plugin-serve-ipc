@@ -23,16 +23,16 @@ export function serveIPC(config) {
 		if (!resolvedConfig) {
 			return;
 		}
-		
+
 		// Separate variable helps TS control flow analysis
 		const viteHttpServer = viteServer.httpServer;
 		if (!viteHttpServer) {
 			throw new Error("vite-plugin-serve-ipc is incompatible with Vite's middleware mode. The enclosing server should expose itself over IPC instead.");
 		}
-		
+
 		/** @type {Net.Server} */
 		let proxy;
-		
+
 		viteHttpServer.on('listening', () => {
 			const address = viteHttpServer.address();
 			if (!address) {
@@ -40,7 +40,7 @@ export function serveIPC(config) {
 			} else if (typeof address === 'string') {
 				throw new Error(`Vite's HTTP server is already listening on an IPC socket: ${address}. The future is now!`);
 			}
-			
+
 			proxy = createProxy({
 				port: address.port,
 				host: address.address,
@@ -49,15 +49,14 @@ export function serveIPC(config) {
 					viteServer.config.logger.error(inspect(error));
 				}
 			});
-			
+
 			proxy.listen(resolvedConfig.listenOptions, () => {
 				viteServer.config.logger.info(`Exposed over IPC at: ${resolvedConfig.listenOptions.path}`);
 			})
 		})
-		
-		viteHttpServer.on('close', () => {
-			proxy.close();
-		})
+
+		viteHttpServer.on('close', () => proxy.close());
+		process.on('exit', () => proxy.close());
 	}
 
 	return {

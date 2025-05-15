@@ -18,15 +18,15 @@ import Net from 'node:net'
 export function createProxy(options) {
 	const server = Net.createServer(sockIPC => {
 		const sockTCP = Net.connect(options.port, options.host);
-		
+
 		sockIPC.on('error', options.onError);
 		sockTCP.on('error', options.onError);
-		
+
 		sockIPC.pipe(sockTCP);
 		sockTCP.pipe(sockIPC);
 	});
-	
+
 	server.on('error', options.onError)
-	
+
 	return server;
 }
