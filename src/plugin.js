@@ -1,4 +1,4 @@
-import { inspect } from "node:util"
+import { inspect, promisify } from "node:util"
 import { resolveConfig } from "./config.js"
 import { createProxy } from "./proxy.js"
 
@@ -7,6 +7,13 @@ import { createProxy } from "./proxy.js"
  * @import { ServeIPCPluginOptions } from "./types.d.ts"
  * @import { Plugin, ViteDevServer, PreviewServer } from "vite"
  */
+
+/**
+ * Reference to the proxy server that persists across Vite server restarts.
+ * This enables waiting for the old proxy to fully close before creating a new one.
+ * @type {Net.Server}
+ */
+let proxy;
 
 /**
  * @param config {ServeIPCPluginOptions}
@@ -19,7 +26,7 @@ export function serveIPC(config) {
 	 * @param viteServer {ViteDevServer|PreviewServer}
 	 * @returns {void}
 	 */
-	function setupIPCProxy(viteServer) {
+	function onViteConfigServer(viteServer) {
 		if (!resolvedConfig) {
 			return;
 		}
@@ -32,15 +39,23 @@ export function serveIPC(config) {
 			return;
 		}
 
-		/** @type {Net.Server} */
-		let proxy;
-
-		viteHttpServer.on('listening', () => {
+		viteHttpServer.on('listening', async () => {
 			const address = viteHttpServer.address();
 			if (!address) {
 				throw new Error("Vite's HTTP server somehow doesn't have an address during listening callback");
 			} else if (typeof address === 'string') {
 				throw new Error(`Vite's HTTP server is already listening on an IPC socket: ${address}. The future is now!`);
+			}
+
+			if (proxy) {
+				// Make sure the previous proxy is fully closed to avoid race conditions
+				try {
+					await promisify(proxy.close).bind(proxy)();
+				} catch (error) {
+					if (/** @type {NodeJS.ErrnoException} */ (error).code !== "ERR_SERVER_NOT_RUNNING") {
+						throw error;
+					}
+				}
 			}
 
 			proxy = createProxy({
@@ -68,7 +83,7 @@ export function serveIPC(config) {
 
 	return {
 		name: 'vite-plugin-serve-ipc',
-		configureServer: setupIPCProxy,
-		configurePreviewServer: setupIPCProxy
+		configureServer: onViteConfigServer,
+		configurePreviewServer: onViteConfigServer
 	}
 }
