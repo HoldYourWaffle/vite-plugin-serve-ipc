@@ -57,8 +57,13 @@ export function serveIPC(config) {
 			})
 		})
 
-		viteHttpServer.on('close', () => proxy.close());
-		process.on('exit', () => proxy.close());
+		const processExitHandler = () => proxy.close();
+		process.on('exit', processExitHandler);
+
+		viteHttpServer.on('close', () => {
+			proxy.close();
+			process.removeListener('exit', processExitHandler);
+		});
 	}
 
 	return {
