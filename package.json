@@ -1,8 +1,8 @@
 {
 	"name": "vite-plugin-serve-ipc",
-	"type": "module",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Serve Vite's development or preview server over IPC.",
+	"type": "module",
 	"main": "src/plugin.js",
 	"types": "src/types.d.ts",
 	"files": [ "src" ],
@@ -16,6 +16,9 @@
 		"@types/node": "^22.15.17",
 		"typescript": "^5.8.3",
 		"vite": "^6.3.5"
+	},
+	"engines": {
+		"node": "^20.0.0 || >=22.0.0"
 	},
 	"author": "HoldYourWaffle <holdyourwaffle@gmail.com>",
 	"license": "MIT",

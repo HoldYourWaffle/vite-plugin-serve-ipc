@@ -68,7 +68,7 @@ export function serveIPC(config) {
 			});
 
 			proxy.listen(resolvedConfig.listenOptions, () => {
-				viteServer.config.logger.info(`Exposed over IPC at: ${resolvedConfig.listenOptions.path}`);
+				viteServer.config.logger.info(`Serving over IPC at: ${resolvedConfig.listenOptions.path}`);
 			})
 		})
 
