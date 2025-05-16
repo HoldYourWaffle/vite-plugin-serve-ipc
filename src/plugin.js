@@ -27,7 +27,9 @@ export function serveIPC(config) {
 		// Separate variable helps TS control flow analysis
 		const viteHttpServer = viteServer.httpServer;
 		if (!viteHttpServer) {
-			throw new Error("vite-plugin-serve-ipc is incompatible with Vite's middleware mode. The enclosing server should expose itself over IPC instead.");
+			// The Vitest VS Code extension uses middleware mode, so this can't fail with an error
+			viteServer.config.logger.warn("vite-plugin-serve-ipc is incompatible with Vite's middleware mode. The enclosing server should expose itself over IPC instead.");
+			return;
 		}
 
 		/** @type {Net.Server} */
